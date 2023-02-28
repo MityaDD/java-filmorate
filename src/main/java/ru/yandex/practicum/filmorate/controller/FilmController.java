@@ -14,7 +14,7 @@ import java.util.*;
 @Slf4j
 public class FilmController {
     private Map<Integer, Film> films = new HashMap<>();
-    private static int id = 1;
+    private int id = 1;
     private static final LocalDate FIRST_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
 
     @GetMapping
@@ -58,7 +58,7 @@ public class FilmController {
     }
 
     private boolean isValid(Film film) {
-        if (film.getName() == null || film.getName().isEmpty()) {
+        if (film.getName() == null || film.getName().isBlank()) {
             logAndThrowException("Название не должно быть пустым");
         }
         if (film.getDescription().length() == 0 || film.getDescription().length() > 200) {
