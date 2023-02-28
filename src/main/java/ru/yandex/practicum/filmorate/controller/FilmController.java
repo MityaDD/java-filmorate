@@ -14,12 +14,11 @@ import java.util.*;
 @Slf4j
 public class FilmController {
     private Map<Integer, Film> films = new HashMap<>();
-    private int id = 1;
+    private static int id = 1;
     private static final LocalDate FIRST_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
 
     @GetMapping
     public List<Film> getFilms() {
-        log.info("Всего в базе фильмов: ", films.size());
         return new ArrayList<>(films.values());
     }
 
@@ -59,7 +58,7 @@ public class FilmController {
     }
 
     private boolean isValid(Film film) {
-        if (film.getName() == null || film.getName().isBlank()) {
+        if (film.getName() == null || film.getName().isEmpty()) {
             logAndThrowException("Название не должно быть пустым");
         }
         if (film.getDescription().length() == 0 || film.getDescription().length() > 200) {
