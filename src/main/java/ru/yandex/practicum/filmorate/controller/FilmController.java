@@ -16,6 +16,7 @@ public class FilmController {
     private Map<Integer, Film> films = new HashMap<>();
     private int id = 1;
     private static final LocalDate FIRST_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
+    private static final int MAX_DESCRIPTION_SIZE = 200;
 
     @GetMapping
     public List<Film> getFilms() {
@@ -61,7 +62,7 @@ public class FilmController {
         if (film.getName() == null || film.getName().isBlank()) {
             logAndThrowException("Название не должно быть пустым");
         }
-        if (film.getDescription().length() == 0 || film.getDescription().length() > 200) {
+        if (film.getDescription().length() == 0 || film.getDescription().length() > MAX_DESCRIPTION_SIZE) {
             logAndThrowException("Описание должно быть не пустым и меньше 200 символов.");
         }
         if (film.getReleaseDate().isBefore(FIRST_DATE)) {
