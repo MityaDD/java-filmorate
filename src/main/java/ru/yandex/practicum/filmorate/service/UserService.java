@@ -1,28 +1,24 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class UserService {
     private final UserStorage userStorage;
 
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
-
-    public Map<Integer, User> allUsers() {
-        return userStorage.allUsers();
+    public Map<Integer, User> getUsersMap() {
+        return userStorage.getUsersMap();
     }
 
     public User addUser(User user) {
@@ -67,34 +63,23 @@ public class UserService {
     }
 
     public List<User> getFriends(Integer userId) {
-        List<User> friends = new ArrayList<>();
-        User user = getUser(userId);
-        Set<Integer> friendsIdSet = user.getFriends();
-        for (Integer id : friendsIdSet) {
-            friends.add(userStorage.allUsers().get(id));
-        }
-        return friends;
+        return getUser(userId).getFriends().stream()
+                .map(id -> getUser(id))
+                .collect(Collectors.toList());
     }
 
-    public Collection<User> getMutualFriends(Integer oneId, Integer anotherId) {
-        List<User> mutualFriends = new ArrayList<>();
-        User oneUser = getUser(oneId);
-        User anotherUser = getUser(anotherId);
-        Set<Integer> oneSet = oneUser.getFriends();
-        Set<Integer> anotherSet = anotherUser.getFriends();
-        for (Integer user : oneSet) {
-            if (anotherSet.contains(user)) {
-                mutualFriends.add(userStorage.allUsers().get(user));
-            }
-        }
-        return mutualFriends;
+    public List<User> getMutualFriends(Integer oneId, Integer anotherId) {
+        return getUser(oneId).getFriends().stream()
+                .filter(id -> getUser(anotherId).getFriends().contains(id))
+                .map(id -> getUser(id))
+                .collect(Collectors.toList());
     }
 
     public User getUser(Integer userId) {
-        if (!userStorage.allUsers().containsKey(userId)) {
+        if (!getUsersMap().containsKey(userId)) {
             logAndThrowNotFound("В базе нет пользователя с id" + userId);
         }
-        return userStorage.allUsers().get(userId);
+        return getUsersMap().get(userId);
     }
 
 

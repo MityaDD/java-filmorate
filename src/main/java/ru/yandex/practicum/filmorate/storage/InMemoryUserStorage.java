@@ -19,7 +19,7 @@ public class InMemoryUserStorage implements UserStorage {
     private int id = 1;
 
     @Override
-    public Map<Integer, User> allUsers() {
+    public Map<Integer, User> getUsersMap() {
         return users;
     }
 

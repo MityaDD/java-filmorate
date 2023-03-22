@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -14,17 +14,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class FilmService {
     private final FilmStorage filmStorage;
 
-    @Autowired
-    public FilmService(FilmStorage filmStorage) {
-        this.filmStorage = filmStorage;
-    }
-
-    public Map<Integer, Film> allFilms() {
-        return filmStorage.allFilms();
+    public Map<Integer, Film> getFilmsMap() {
+        return filmStorage.getFilmsMap();
     }
 
     public Film addFilm(Film film) {
@@ -61,16 +57,16 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(Integer count) {
-        return filmStorage.allFilms().values().stream()
+        return getFilmsMap().values().stream()
                 .sorted(Comparator.comparing(Film::getLikesSize).reversed())
                 .limit(count).collect(Collectors.toList());
     }
 
     public Film getFilm(Integer filmId) {
-        if (!filmStorage.allFilms().containsKey(filmId)) {
+        if (!getFilmsMap().containsKey(filmId)) {
             logAndThrowNotFound("В базе нет фильма с id " + filmId);
         }
-        return filmStorage.allFilms().get(filmId);
+        return getFilmsMap().get(filmId);
     }
 
     private void logAndThrowException(String message) {

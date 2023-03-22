@@ -21,7 +21,7 @@ public class FilmController {
 
     @GetMapping
     public Collection<Film> getFilms() {
-        return filmService.allFilms().values();
+        return filmService.getFilmsMap().values();
     }
 
     @PostMapping

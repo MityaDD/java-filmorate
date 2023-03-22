@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.Map;
 
 public interface UserStorage {
-    Map<Integer, User> allUsers();
+    Map<Integer, User> getUsersMap();
 
     User addUser(User user);
 

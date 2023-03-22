@@ -21,7 +21,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private static final int MAX_DESCRIPTION_SIZE = 200;
 
     @Override
-    public Map<Integer, Film> allFilms() {
+    public Map<Integer, Film> getFilmsMap() {
         return films;
     }
 
