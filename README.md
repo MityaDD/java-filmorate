@@ -15,7 +15,7 @@
     <img src="src/main/resources/DB_diagram.png">
 </picture>
 
-# Примеры запросов
+## Примеры запросов
 
 **Получение списка всех пользователей:**
 
@@ -23,12 +23,11 @@
 SELECT *
 FROM users;
 ```
-
-| user\_id | email            | login   | name      | birthday   |
-|:--------:|:-----------------|:--------|:----------|:-----------|
-|    1     | vas-qzy@mail.ru  | Vaso666 | Василий   | 1998-11-15 |
-|    2     | alexxx77@ro.ru   | ALLeonov| Александр | 2003-03-24 |
-|    3     | paalax@yandex.ru | Nathan  | Валентин  | 1978-01-23 |
+| user\_id | login    | name      |  email           | birthday   |
+|:--------:|:---------|:----------|:-----------------|:-----------|
+|    1     | vaso666  | Василий   | vas-qzy@mail.ru  | 1998-11-15 |
+|    2     | ALLeonov | Александр | alexxx77@ro.ru   | 2003-03-24 |
+|    3     | nathan   | Валентин  | paalax@yandex.ru | 1978-01-23 |
 
 **Другие запросы:**
 ```sql
