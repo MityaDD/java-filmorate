@@ -17,7 +17,7 @@
 
 # Примеры запросов
 
-### Получение списка всех пользователей
+**Получение списка всех пользователей:**
 
 ```sql
 SELECT *
@@ -30,15 +30,11 @@ FROM users;
 |    2     | alexxx77@ro.ru   | ALLeonov| Александр | 2003-03-24 |
 |    3     | paalax@yandex.ru | Nathan  | Валентин  | 1978-01-23 |
 
-**Примеры запросов:**
-```
+**Другие запросы:**
+```sql
 -- Получение списка всех фильмов:  
 SELECT * 
 FROM films;  
-
--- Получение спика всех пользователей: 
-SELECT * 
-FROM users;
 
 -- Получение списка 10 популярных фильмов:  
 SELECT fi.*
@@ -58,4 +54,4 @@ WHERE fr.user_id = (искомый пользователь)
 ORDER BY us.user_id;
 ```
 Стек технологий:
-Java 11, PostgreSQL, Spring Boot, Maven, REST API
+Java 11, Spring Boot, Maven, REST API, H2
