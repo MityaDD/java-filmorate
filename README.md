@@ -2,8 +2,10 @@
 <picture>
     <img src="src/main/resources/logo.png">
 </picture>
-Данное приложение обрабатывает данные фильмов:clapper: и пользователей:office_worker:,
-которые ставят оценки этим фильмам. Имеет следующую функциональность:
+С каждым годом фильмов становится всё больше и больше. А значит, всё сложнее становится делать выбор,
+чтобы посмотреть сегодня вечером. Теперь ни вам, ни вашим друзьям не придётся долго размышлять над этим вопросом. 
+Наше приложение обрабатывает данные фильмов:clapper:, пользователей:office_worker: и дает все необходимые рекомендации.
+Приложение имеет следующую функциональность:
 
 * хранение списка фильмов
 * выгрузка списков фильмов по рейтингу и популярности
@@ -40,7 +42,7 @@ SELECT fi.*
 FROM films AS fi   
 LEFT JOIN likes AS li ON fi.film_id = li.film_id  
 GROUP BY fi.film_id  
-ORDER BY COUNT(li.user_id) desc  
+ORDER BY COUNT(li.user_id) DESC  
 limit 10;
 
 -- Получение списка друзей пользователя:
@@ -49,8 +51,8 @@ SELECT us.user_id,
        us.login,
 FROM friends AS fr
 LEFT JOIN users AS us ON fr.friend_id = us.user_id 
-WHERE fr.user_id = (искомый пользователь)  
+WHERE fr.user_id = ? 
 ORDER BY us.user_id;
 ```
-Стек технологий:
-Java 11, Spring Boot, Maven, REST API, H2
+*Стек технологий:*
+*Java 11, Spring Boot, Maven, REST API, JDBC, H2*
