@@ -36,24 +36,24 @@ FROM users;
 ```sql
 -- Получение списка всех фильмов:  
 SELECT * 
-FROM films;  
+FROM films;
 
--- Получение списка 10 популярных фильмов:  
-SELECT fi.*
-FROM films AS fi   
-LEFT JOIN likes AS li ON fi.film_id = li.film_id  
-GROUP BY fi.film_id  
-ORDER BY COUNT(li.user_id) DESC  
-limit 10;
+-- Поставить лайк фильму:  
+INSERT INTO likes(user_id, film_id) 
+VALUES (?, ?);
 
--- Получение списка друзей пользователя:
-SELECT us.user_id,
-       us.name, 
-       us.login,
-FROM friends AS fr
-LEFT JOIN users AS us ON fr.friend_id = us.user_id 
-WHERE fr.user_id = ? 
-ORDER BY us.user_id;
+-- Добавление жанра фильму:  
+INSERT INTO film_genre (film_id, genre_id) 
+VALUES (?, ?);
+
+-- Обновление фильма:
+UPDATE films 
+SET name = ?, 
+    description = ?, 
+    release_date = ?, 
+    duration = ?, 
+    mpa_id = ? 
+WHERE film_id = ?;
 ```
 *Стек технологий:*
 *Java 11, Spring Boot, Maven, REST API, JDBC, H2*
