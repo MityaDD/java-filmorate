@@ -1,0 +1,21 @@
+INSERT INTO mpa_rating (mpa_id, name) VALUES ('1', 'G');
+INSERT INTO mpa_rating (mpa_id, name) VALUES ('2', 'PG');
+INSERT INTO mpa_rating (mpa_id, name) VALUES ('3', 'PG-13');
+INSERT INTO mpa_rating (mpa_id, name) VALUES ('4', 'R');
+INSERT INTO mpa_rating (mpa_id, name) VALUES ('5', 'NC-17');
+
+INSERT INTO genre (genre_id, name) VALUES ('1', 'Комедия');
+INSERT INTO genre (genre_id, name) VALUES ('2', 'Драма');
+INSERT INTO genre (genre_id, name) VALUES ('3', 'Мультфильм');
+INSERT INTO genre (genre_id, name) VALUES ('4', 'Триллер');
+INSERT INTO genre (genre_id, name) VALUES ('5', 'Документальный');
+INSERT INTO genre (genre_id, name) VALUES ('6', 'Боевик');
+//INSERT INTO genre (genre_id, name) VALUES ('7', 'Приключение');
+//INSERT INTO genre (genre_id, name) VALUES ('8', 'Фантастика');
+//INSERT INTO genre (genre_id, name) VALUES ('9', 'Фэнтези');
+//INSERT INTO genre (genre_id, name) VALUES ('10', 'Детектив');
+//INSERT INTO genre (genre_id, name) VALUES ('11', 'Мелодрама');
+//INSERT INTO genre (genre_id, name) VALUES ('12', 'Вестерн');
+//INSERT INTO genre (genre_id, name) VALUES ('13', 'Байопик');
+//INSERT INTO genre (genre_id, name) VALUES ('14', 'Исторический');
+//INSERT INTO genre (genre_id, name) VALUES ('15', 'Ужасы');

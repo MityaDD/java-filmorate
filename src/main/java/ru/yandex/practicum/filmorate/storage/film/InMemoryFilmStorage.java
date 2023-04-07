@@ -1,10 +1,11 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,8 +18,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private Map<Integer, Film> films = new HashMap<>();
     private int id = 1;
-    private static final LocalDate FIRST_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
-    private static final int MAX_DESCRIPTION_SIZE = 200;
 
     @Override
     public Map<Integer, Film> getFilmsMap() {
@@ -30,11 +29,11 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (films.containsKey(film.getId()) || isRepeat(film)) {
             logAndThrowNotFound("Фильм уже занесен в базу");
         }
-        if (isValid(film)) {
-            film.setId(id++);
-            films.put(film.getId(), film);
-            log.info("Добавлен новый фильм: " + film);
-        }
+
+        film.setId(id++);
+        films.put(film.getId(), film);
+        log.info("Добавлен новый фильм: " + film);
+
         return film;
     }
 
@@ -46,17 +45,17 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (!films.containsKey(film.getId())) {
             logAndThrowNotFound("Фильма нет в базе");
         }
-        if (isValid(film)) {
-            Film updatedFilm = films.get(film.getId());
-            if (!film.getName().isBlank()) {
-                updatedFilm.setName(film.getName());
-            }
-            updatedFilm.setDescription(film.getDescription());
-            updatedFilm.setReleaseDate(film.getReleaseDate());
-            updatedFilm.setDuration(film.getDuration());
-            films.put(film.getId(), updatedFilm);
-            log.debug("Обновлен фильм " + updatedFilm);
+
+        Film updatedFilm = films.get(film.getId());
+        if (!film.getName().isBlank()) {
+            updatedFilm.setName(film.getName());
         }
+        updatedFilm.setDescription(film.getDescription());
+        updatedFilm.setReleaseDate(film.getReleaseDate());
+        updatedFilm.setDuration(film.getDuration());
+        films.put(film.getId(), updatedFilm);
+        log.debug("Обновлен фильм " + updatedFilm);
+
         return film;
     }
 
@@ -69,20 +68,31 @@ public class InMemoryFilmStorage implements FilmStorage {
         log.debug("Удален фильм " + id);
     }
 
-    private boolean isValid(Film film) {
-        if (film.getName() == null || film.getName().isBlank()) {
-            logAndThrowException("Название не должно быть пустым");
+    @Override
+    public Film getFilm(Integer filmId) {
+        if (!getFilmsMap().containsKey(filmId)) {
+            logAndThrowNotFound("В базе нет фильма с id " + filmId);
         }
-        if (film.getDescription().length() == 0 || film.getDescription().length() > MAX_DESCRIPTION_SIZE) {
-            logAndThrowException("Описание должно быть не пустым и меньше 200 символов.");
+        return getFilmsMap().get(filmId);
+    }
+
+    @Override
+    public void addLike(Integer filmId, Integer userId) {
+
+        Film film = getFilm(filmId);
+        film.getLikes().add(userId);
+
+    }
+
+    @Override
+    public void removeLike(Integer filmId, Integer userId) {
+
+        Film film = getFilm(filmId);
+        if (!film.getLikes().contains(userId)) {
+            logAndThrowNotFound("Пользователь с id " + userId + " не ставил лайк фильму с id " + filmId);
         }
-        if (film.getReleaseDate().isBefore(FIRST_DATE)) {
-            logAndThrowException("Дата релиза должна быть не раньше 28 декабря 1895 года");
-        }
-        if (film.getDuration() <= 0) {
-            logAndThrowException("Продолжительность фильма должна быть положительной");
-        }
-        return true;
+        film.getLikes().remove(userId);
+
     }
 
     private boolean isRepeat(Film film) {
