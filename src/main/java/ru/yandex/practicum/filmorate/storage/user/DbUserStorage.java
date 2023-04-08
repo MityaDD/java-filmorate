@@ -38,7 +38,7 @@ public class DbUserStorage implements UserStorage {
     public User addUser(User user) {
         Map<String, Object> keys = new SimpleJdbcInsert(this.jdbcTemplate)
                 .withTableName("users")
-                .usingColumns("login","name", "email", "birthday")
+                .usingColumns("login", "name", "email", "birthday")
                 .usingGeneratedKeyColumns("user_id")
                 .executeAndReturnKeyHolder(Map.of(
                         "login", user.getLogin(),
@@ -78,7 +78,7 @@ public class DbUserStorage implements UserStorage {
     @Override
     public Map<Integer, User> getUsersMap() {
         return jdbcTemplate.query(GET_USERS, (rs, rowNum) -> renderUser(rs)).stream()
-                .collect(Collectors.toMap(u -> u.getId() , u -> u));
+                .collect(Collectors.toMap(u -> u.getId(), u -> u));
     }
 
     public User getUser(Integer userId) {

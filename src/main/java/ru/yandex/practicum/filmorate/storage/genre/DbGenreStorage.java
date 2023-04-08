@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Component

@@ -119,7 +119,7 @@ public class DbFilmStorage implements FilmStorage {
 
     public HashSet<Genre> setGenres(int[] genreIds) {
         HashSet<Genre> set = new HashSet<>();
-        for (int i=0; i < genreIds.length; i++) {
+        for (int i = 0; i < genreIds.length; i++) {
             set.add(genreStorage.getGenre(genreIds[i]));
         }
         return set;

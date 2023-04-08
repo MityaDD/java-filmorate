@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -57,8 +56,7 @@ public class Film {
         this.mpa = mpa;
     }
 
-    public Film(String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres ) {
-        this.id = id;
+    public Film(String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
@@ -74,10 +72,10 @@ public class Film {
         this.releaseDate = releaseDate;
         this.duration = duration;
         this.mpa = mpa;
-
     }
 
-    public Film(int id, String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres ) {
+    public Film(int id, String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
