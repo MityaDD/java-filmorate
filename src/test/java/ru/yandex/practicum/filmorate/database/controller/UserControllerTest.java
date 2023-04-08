@@ -43,22 +43,22 @@ class UserControllerTest {
         userNoEmail = new User("", "macho", "Steve",
                 LocalDate.of(1996, 7, 16));
 
-        userIncorrectEmail = new User( "chaplimailro.ru", "pitipon", "Pierre",
+        userIncorrectEmail = new User("chaplimailro.ru", "pitipon", "Pierre",
                 LocalDate.of(1982, 3, 22));
 
-        userWithoutName = new User( "salvador@t.ru", "lucky777", "",
+        userWithoutName = new User("salvador@t.ru", "lucky777", "",
                 LocalDate.of(1989, 4, 8));
 
         userEmptyLogin = new User("pierrechaplin@ro.ru", "", "Olga",
                 LocalDate.of(2000, 11, 19));
 
-        userIncorrectLogin = new User( "ronin546@yandex.ru", "ro nin", "Igor",
+        userIncorrectLogin = new User("ronin546@yandex.ru", "ro nin", "Igor",
                 LocalDate.of(1984, 5, 13));
 
         userBornNow = new User("shadkhaniot@gmail.com", "shadkhan", "Nathan",
                 LocalDate.now());
 
-        userFromFuture = new User( "xiolin@taiwanpost.tw", "*linyu*", "linyu",
+        userFromFuture = new User("xiolin@taiwanpost.tw", "*linyu*", "linyu",
                 LocalDate.of(2184, 5, 13));
     }
 

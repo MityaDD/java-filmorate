@@ -11,11 +11,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.friends.DbFriendsStorage;
-import ru.yandex.practicum.filmorate.storage.user.DbUserStorage;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,10 +33,10 @@ class DbFriendsStorageTest {
         user1 = new User("vasya666@mail.ru", "Nagibator", "Vasya",
                 LocalDate.of(2001, 1, 21));
 
-        user2 = new User( "salvador@t.ru", "lucky777", "Max",
+        user2 = new User("salvador@t.ru", "lucky777", "Max",
                 LocalDate.of(1989, 4, 8));
 
-        user3 = new User( "pierrechaplin@ro.ru", "mutnaya", "Olga",
+        user3 = new User("pierrechaplin@ro.ru", "mutnaya", "Olga",
                 LocalDate.of(2000, 11, 19));
     }
 

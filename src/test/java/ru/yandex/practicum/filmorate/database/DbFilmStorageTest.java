@@ -34,11 +34,11 @@ class DbFilmStorageTest {
         movie = new Film("The Shawshank Redemption", "Over the course of several years, two convicts",
                 LocalDate.of(1993, 5, 6), 141, filmStorage.setMpa(2));
         movieWithGenres = new Film("Memento", "A man with short-term memory loss attempts ",
-                LocalDate.of(2004, 2, 23), 121, filmStorage.setMpa(3),filmStorage.setGenres(genres));
-        updatedMovie = new Film(1,"Red Dead Redemption", "the family of former outlaw is kidnapped",
+                LocalDate.of(2004, 2, 23), 121, filmStorage.setMpa(3), filmStorage.setGenres(genres));
+        updatedMovie = new Film(1, "Red Dead Redemption", "the family of former outlaw is kidnapped",
                 LocalDate.of(2003, 3, 7), 101, filmStorage.setMpa(1));
         updatedMovieWithGenres = new Film(2, "Memento mori", "dulce et decorum est pro patria mori",
-                LocalDate.of(2014, 1, 13), 181, filmStorage.setMpa(4),filmStorage.setGenres(updatedGenres));
+                LocalDate.of(2014, 1, 13), 181, filmStorage.setMpa(4), filmStorage.setGenres(updatedGenres));
 
         filmStorage.addFilm(movie);
     }

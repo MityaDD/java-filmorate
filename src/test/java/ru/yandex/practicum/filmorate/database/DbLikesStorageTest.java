@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.database;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,15 +9,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.DbFilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.DbLikesStorage;
 import ru.yandex.practicum.filmorate.storage.user.DbUserStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,10 +49,10 @@ class DbLikesStorageTest {
         user1 = new User("vasya666@mail.ru", "Nagibator", "Vasya",
                 LocalDate.of(2001, 1, 21));
 
-        user2 = new User( "salvador@t.ru", "lucky777", "Max",
+        user2 = new User("salvador@t.ru", "lucky777", "Max",
                 LocalDate.of(1989, 4, 8));
 
-        user3 = new User( "pierrechaplin@ro.ru", "mutnaya", "Olga",
+        user3 = new User("pierrechaplin@ro.ru", "mutnaya", "Olga",
                 LocalDate.of(2000, 11, 19));
 
         userStorage.addUser(user1);

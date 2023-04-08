@@ -37,31 +37,31 @@ class FilmControllerTest {
 
     @BeforeEach
     void setUp() {
-        movie = new Film( "The Showshank Redemption", "Over the course of several years, two convicts",
+        movie = new Film("The Showshank Redemption", "Over the course of several years, two convicts",
                 LocalDate.of(1993, 5, 6), 141, filmStorage.setMpa(1));
 
         updatedMovie = new Film(1, "The Shawshank Redemption", "Over the course of several years, two convicts form a friendship",
                 LocalDate.of(1994, 6, 7), 142, filmStorage.setMpa(3));
 
-        movieWithoutName = new Film( "", "The jury of 12 in a New York City murder trial",
+        movieWithoutName = new Film("", "The jury of 12 in a New York City murder trial",
                 LocalDate.of(1957, 2, 9), 142, filmStorage.setMpa(2));
 
-        movieDescription200 = new Film( "The Godfather", "The Godfather Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. His youngest son Michael and a decorated WW II Marine is also present...",
+        movieDescription200 = new Film("The Godfather", "The Godfather Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. His youngest son Michael and a decorated WW II Marine is also present...",
                 LocalDate.of(1972, 5, 17), 175, filmStorage.setMpa(4));
 
-        movieDescription201 = new Film( "The Godfather 2", "The Godfather Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. His youngest son Michael and a decorated WW II Marine is also present...+",
+        movieDescription201 = new Film("The Godfather 2", "The Godfather Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. His youngest son Michael and a decorated WW II Marine is also present...+",
                 LocalDate.of(1972, 11, 12), 163, filmStorage.setMpa(1));
 
-        movieDurationNegative = new Film( "Hotaru no haka", "A young boy and his little sister struggle to survive",
+        movieDurationNegative = new Film("Hotaru no haka", "A young boy and his little sister struggle to survive",
                 LocalDate.of(1988, 3, 12), -107, filmStorage.setMpa(2));
 
-        movieDurationZero = new Film( "Memento", "A man with short-term memory loss attempts ",
+        movieDurationZero = new Film("Memento", "A man with short-term memory loss attempts ",
                 LocalDate.of(2004, 2, 23), 0, filmStorage.setMpa(3));
 
         movie28dec1895 = new Film("Interstellar", "A team of explorers travel through a wormhole in space",
                 LocalDate.of(1895, 12, 28), 142, filmStorage.setMpa(5));
 
-        movie27dec1895 = new Film( "Inception", "A thief who steals corporate secrets through the use of dream-sharing technology",
+        movie27dec1895 = new Film("Inception", "A thief who steals corporate secrets through the use of dream-sharing technology",
                 LocalDate.of(1895, 12, 27), 142, filmStorage.setMpa(1));
 
     }

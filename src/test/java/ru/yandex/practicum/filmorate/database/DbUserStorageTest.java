@@ -32,10 +32,10 @@ class DbUserStorageTest {
         user = new User("vasya666@mail.ru", "Nagibator", "Vasya",
                 LocalDate.of(2001, 1, 21));
 
-        updatedUser = new User(1,"vasya777@yandex.ru", "NagibatorXXX", "Vasiliy",
+        updatedUser = new User(1, "vasya777@yandex.ru", "NagibatorXXX", "Vasiliy",
                 LocalDate.of(2007, 7, 27));
 
-        user2 = new User( "salvador@t.ru", "lucky777", "Max",
+        user2 = new User("salvador@t.ru", "lucky777", "Max",
                 LocalDate.of(1989, 4, 8));
 
         userStorage.addUser(user);
