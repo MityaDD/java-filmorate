@@ -29,7 +29,6 @@ class DbFilmStorageTest {
 
     @BeforeEach
     public void setUp() {
-
         int[] genres = {1, 2};
         int[] updatedGenres = {2, 3};
         movie = new Film("The Shawshank Redemption", "Over the course of several years, two convicts",
@@ -42,7 +41,6 @@ class DbFilmStorageTest {
                 LocalDate.of(2014, 1, 13), 181, filmStorage.setMpa(4),filmStorage.setGenres(updatedGenres));
 
         filmStorage.addFilm(movie);
-
     }
 
     @Test
