@@ -1,43 +1,25 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.mpa.DbMpaStorage;
 
 import java.util.Collection;
 
 @RequiredArgsConstructor
-@Component
-@Slf4j
+@Service
 public class MpaService {
-    private final JdbcTemplate jdbcTemplate;
 
-    private static final String SELECT_FROM_MPA_RATING = "SELECT * FROM MPA_RATING";
-    private static final String SELECT_NAME_FROM_MPA_RATING_WHERE_MPA_ID =
-            "SELECT NAME FROM MPA_RATING WHERE MPA_ID = ?";
+    private final DbMpaStorage dbMpaStorage;
 
-
-    public Collection<Mpa> getMpa() {
-        return jdbcTemplate.query(SELECT_FROM_MPA_RATING, (rs, rowNum) -> new Mpa(
-                rs.getInt("mpa_id"),
-                rs.getString("name"))
-        );
+    public Collection<Mpa> getAllMpa() {
+        return dbMpaStorage.getAllMpa();
     }
 
-    public Mpa get(int id) {
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet(SELECT_NAME_FROM_MPA_RATING_WHERE_MPA_ID, id);
-        if (userRows.next()) {
-            Mpa mpa = new Mpa(
-                    id,
-                    userRows.getString("name")
-            );
-            log.info("Mpa предоставлен: {}", mpa);
-            return mpa;
-        } else throw new ObjectNotFoundException(String.format("Mpa не найден: id=%d", id));
+    public Mpa getMpa(int mpaId) {
+        return dbMpaStorage.getMpa(mpaId);
     }
+
 }
 

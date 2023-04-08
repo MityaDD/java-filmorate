@@ -2,18 +2,13 @@ package ru.yandex.practicum.filmorate.storage.like;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.DbMpaStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,8 +22,8 @@ public class DbLikesStorage implements LikesStorage {
 
     private static final String GET_FILMS = "SELECT * FROM films";
     private static final String GET_LIKES = "SELECT user_id FROM likes WHERE film_id = ?";
-    private static final String ADD_LIKE = "INSERT INTO likes(user_id, film_id) VALUES (?, ?)";
-    private static final String REMOVE_LIKE = "DELETE FROM likes WHERE user_id = ? AND film_id = ?";
+    private static final String ADD_LIKE = "INSERT INTO likes(film_id, user_id) VALUES (?, ?)";
+    private static final String REMOVE_LIKE = "DELETE FROM likes WHERE film_id = ? AND user_id = ?";
     private static final String GET_TOP_FILMS = "SELECT FILMS.film_id, name, description, release_date, duration," +
             "COUNT(L.USER_ID) as rating " +
             "FROM films " +
@@ -38,14 +33,12 @@ public class DbLikesStorage implements LikesStorage {
             "LIMIT ?";
 
     public void addLike(Integer filmId, Integer userId) {
-        // isExisting??
-        jdbcTemplate.update(ADD_LIKE, userId, filmId);
+        jdbcTemplate.update(ADD_LIKE, filmId, userId);
         log.info("Пользователь {} поставил like к фильму {}", userId, filmId);
     }
 
     public void removeLike(Integer filmId, Integer userId) {
-        // isExisting??
-        jdbcTemplate.update(REMOVE_LIKE, userId, filmId);
+        jdbcTemplate.update(REMOVE_LIKE, filmId, userId);
         log.info("Пользователь {} удалил свой like к фильму {}", userId, filmId);
 
     }

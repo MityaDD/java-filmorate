@@ -29,23 +29,16 @@ public class Film {
     @NotBlank
     @Size(max = 200)
     private String description;
-
     @NotNull
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
-
     @PositiveOrZero
     private long duration;
-
     private Set<Genre> genres = new HashSet<>();
-    //private Set<Genre> genres = new TreeSet<>(Comparator.comparing(Genre::getId, Comparator.naturalOrder()));
-
     @NotNull
     private Mpa mpa;
-
-    //@JsonIgnore
     private Set<Integer> likes = new HashSet<>();
 
     public Film(int id, String name, String description, LocalDate releaseDate, long duration) {
@@ -55,6 +48,44 @@ public class Film {
         this.releaseDate = releaseDate;
         this.duration = duration;
     }
+
+    public Film(String name, String description, LocalDate releaseDate, long duration, Mpa mpa) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+    }
+
+    public Film(String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+        this.genres = genres;
+    }
+
+    public Film(int id, String name, String description, LocalDate releaseDate, long duration, Mpa mpa) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+
+    }
+
+    public Film(int id, String name, String description, LocalDate releaseDate, long duration, Mpa mpa, Set<Genre> genres ) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+        this.genres = genres;
+    }
+
     public Integer getLikesSize() {
         return likes.size();
     }

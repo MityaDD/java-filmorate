@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +8,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikesStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -17,6 +17,7 @@ import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -26,15 +27,11 @@ public class DbFilmStorage implements FilmStorage {
     private final MpaStorage mpaStorage;
     private final LikesStorage likesStorage;
 
-
-    private static final String SQL_GET_FILMS = "SELECT * FROM films";
+    private static final String GET_FILMS = "SELECT * FROM films";
     private static final String GET_FILM_BY_ID = "SELECT * FROM films WHERE film_id = ?";
     private static final String DELETE_FILM = "DELETE FROM films WHERE film_id = ?";
     private static final String DELETE_FILM_FROM_FILM_GENRE = "DELETE FROM film_genre WHERE film_id = ?";
     private static final String DELETE_FILM_FROM_LIKES = "DELETE FROM likes WHERE film_id = ?";
-    private static final String SET_MPA_ID = "UPDATE films SET mpa_id = ? WHERE film_id = ?";
-    private static final String ADD_FILM = "INSERT INTO films(name, description, release_date, duration, mpa_id) " +
-            "VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_FILM = "UPDATE films SET name = ?, description = ?, release_date = ?, " +
             "duration = ?, mpa_id = ? WHERE film_id = ?";
 
@@ -44,17 +41,6 @@ public class DbFilmStorage implements FilmStorage {
         this.likesStorage = likesStorage;
         this.genreStorage = genreStorage;
         this.mpaStorage = mpaStorage;
-    }
-
-    @Override
-    public Map<Integer, Film> getFilmsMap() {
-        Map<Integer, Film> filmMap = new HashMap<>();
-        List<Film> filmList = jdbcTemplate.query(SQL_GET_FILMS, (rs, rowNum) -> renderFilm(rs));
-        for (Film f : filmList) {
-            filmMap.put(f.getId(), f);
-        }
-        log.debug("Запрошен список фильмов.");
-        return filmMap;
     }
 
     @Override
@@ -101,10 +87,16 @@ public class DbFilmStorage implements FilmStorage {
         if (!isExisting(filmId)) {
             logAndThrowNotFound(String.format("Не найден пользователь с id=%d", filmId));
         }
-        jdbcTemplate.update(DELETE_FILM, filmId);
-        jdbcTemplate.update(DELETE_FILM_FROM_FILM_GENRE, filmId);
         jdbcTemplate.update(DELETE_FILM_FROM_LIKES, filmId);
+        jdbcTemplate.update(DELETE_FILM_FROM_FILM_GENRE, filmId);
+        jdbcTemplate.update(DELETE_FILM, filmId);
         log.info("Удаллен фильм с id={}", filmId);
+    }
+
+    @Override
+    public Map<Integer, Film> getFilmsMap() {
+        return jdbcTemplate.query(GET_FILMS, (rs, rowNum) -> renderFilm(rs)).stream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
     }
 
     @Override
@@ -123,6 +115,18 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public void removeLike(Integer filmId, Integer userId) {
         likesStorage.removeLike(filmId, userId);
+    }
+
+    public HashSet<Genre> setGenres(int[] genreIds) {
+        HashSet<Genre> set = new HashSet<>();
+        for (int i=0; i < genreIds.length; i++) {
+            set.add(genreStorage.getGenre(genreIds[i]));
+        }
+        return set;
+    }
+
+    public Mpa setMpa(int mpaId) {
+        return mpaStorage.getMpa(mpaId);
     }
 
     private Film renderFilm(ResultSet rs) throws SQLException {

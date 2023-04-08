@@ -11,12 +11,9 @@ import ru.yandex.practicum.filmorate.storage.friends.FriendsStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.function.UnaryOperator.identity;
 
 @Component
 @Slf4j
@@ -78,7 +75,6 @@ public class DbUserStorage implements UserStorage {
         log.info("Удален пользователь с id={}", id);
     }
 
-
     @Override
     public Map<Integer, User> getUsersMap() {
         return jdbcTemplate.query(GET_USERS, (rs, rowNum) -> renderUser(rs)).stream()
@@ -113,7 +109,6 @@ public class DbUserStorage implements UserStorage {
         friendsStorage.removeFriend(userId, friendId);
     }
 
-
     private User renderUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("user_id"),
@@ -124,16 +119,6 @@ public class DbUserStorage implements UserStorage {
                 friendsStorage.findFriends(rs.getInt("user_id"))
         );
     }
-    /*
-    private Set<Integer> getFriendIdSet(Integer userId) {
-        return friendsStorage.getFriends(userId).stream()
-                .map(u -> u.getId())
-                .collect(Collectors.toSet());
-    }
-
-     */
-
-
 
     private boolean isExisting(int id) {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(GET_USER_BY_ID, id);

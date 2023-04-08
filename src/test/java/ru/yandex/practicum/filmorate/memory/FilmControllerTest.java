@@ -1,14 +1,14 @@
-package ru.yandex.practicum.filmorate.controller;
+package ru.yandex.practicum.filmorate.memory;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.like.LikesStorage;
 
 import java.time.LocalDate;
 
@@ -43,7 +43,7 @@ class FilmControllerTest {
         movieDurationNegative = new Film(1, "Hotaru no haka", "A young boy and his little sister struggle to survive",
                 LocalDate.of(1988, 3, 12), -107);
         movieDurationZero = new Film(1, "Memento", "A man with short-term memory loss attempts ",
-                LocalDate.of(200, 2, 23), 142);
+                LocalDate.of(2004, 2, 23), 0);
         movie28dec1895 = new Film(1, "Interstellar", "A team of explorers travel through a wormhole in space",
                 LocalDate.of(1895, 12, 28), 142);
         movie27dec1895 = new Film(1, "Inception", "A thief who steals corporate secrets through the use of dream-sharing technology",
