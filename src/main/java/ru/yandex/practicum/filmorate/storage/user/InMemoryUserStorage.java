@@ -28,9 +28,9 @@ public class InMemoryUserStorage implements UserStorage {
             logAndThrowNotFound("Пользователь уже занесен в базу");
         }
 
-            user.setId(id++);
-            users.put(user.getId(), user);
-            log.info("Добавлен новый пользователь: " + user);
+        user.setId(id++);
+        users.put(user.getId(), user);
+        log.info("Добавлен новый пользователь: " + user);
 
         return user;
     }
@@ -44,13 +44,13 @@ public class InMemoryUserStorage implements UserStorage {
             logAndThrowNotFound("Пользователя нет в базе.");
         }
 
-            User updatedUser = users.get(user.getId());
-            updatedUser.setEmail(user.getEmail());
-            updatedUser.setLogin(user.getLogin());
-            updatedUser.setName(user.getName());
-            updatedUser.setBirthday(user.getBirthday());
-            users.put(user.getId(), updatedUser);
-            log.debug("Обновлены данные пользователя " + user);
+        User updatedUser = users.get(user.getId());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setLogin(user.getLogin());
+        updatedUser.setName(user.getName());
+        updatedUser.setBirthday(user.getBirthday());
+        users.put(user.getId(), updatedUser);
+        log.debug("Обновлены данные пользователя " + user);
 
         return user;
     }
@@ -84,11 +84,7 @@ public class InMemoryUserStorage implements UserStorage {
     public void deleteFriend(Integer userId, Integer friendId) {
         User user = getUser(userId);
         User friend = getUser(friendId);
-/*
-        if (!user.getFriends().contains(friendId)) {
-            logAndThrowNotFound("В дурзьях нет пользователя с id = " + friendId);
-        }
- */
+
         user.getFriends().remove(friend.getId());
         friend.getFriends().remove(user.getId());
     }

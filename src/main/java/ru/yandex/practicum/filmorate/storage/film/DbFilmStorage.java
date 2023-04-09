@@ -117,12 +117,10 @@ public class DbFilmStorage implements FilmStorage {
         likesStorage.removeLike(filmId, userId);
     }
 
-    public HashSet<Genre> setGenres(int[] genreIds) {
-        HashSet<Genre> set = new HashSet<>();
-        for (int i = 0; i < genreIds.length; i++) {
-            set.add(genreStorage.getGenre(genreIds[i]));
-        }
-        return set;
+    public Set<Genre> setGenres(int[] genreIds) {
+        return Arrays.stream(genreIds)
+                .mapToObj(id -> genreStorage.getGenre(id))
+                .collect(Collectors.toSet());
     }
 
     public Mpa setMpa(int mpaId) {

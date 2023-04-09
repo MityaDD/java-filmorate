@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 
 public interface GenreStorage {
 
@@ -12,7 +12,7 @@ public interface GenreStorage {
 
     void removeGenres(Film film);
 
-    HashSet<Genre> getFilmGenres(Integer filmId);
+    Set<Genre> getFilmGenres(Integer filmId);
 
     Collection<Genre> getAllGenres();
 

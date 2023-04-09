@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Component
@@ -46,7 +47,7 @@ public class DbGenreStorage implements GenreStorage {
     }
 
     @Override
-    public HashSet<Genre> getFilmGenres(Integer filmId) {
+    public Set<Genre> getFilmGenres(Integer filmId) {
         return new HashSet<>(jdbcTemplate.query(GET_GENRES_OF_FILM, (rs, rowNum) -> new Genre(
                         rs.getInt("genre_id"),
                         rs.getString("name")),
