@@ -1,65 +1,82 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class UserService {
     private final UserStorage userStorage;
+
+    @Autowired
+    public UserService(@Qualifier("dbUserStorage") UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     public Map<Integer, User> getUsersMap() {
         return userStorage.getUsersMap();
     }
 
     public User addUser(User user) {
-        return userStorage.addUser(user);
+        if (isValid(user)) {
+            userStorage.addUser(user);
+        }
+        return user;
     }
 
     public User updateUser(User user) {
-        return userStorage.updateUser(user);
+        if (isValid(user)) {
+            userStorage.updateUser(user);
+        }
+        return user;
     }
 
     public void removeUser(Integer id) {
         userStorage.removeUser(id);
     }
 
+    public User getUser(Integer userId) {
+        return userStorage.getUser(userId);
+    }
+
     public User addFriend(Integer userId, Integer friendId) {
         if (userId < 0 || friendId < 0) {
             logAndThrowNotFound("Отрицательный id" + userId + friendId);
         }
-        User user = getUser(userId);
-        User friend = getUser(friendId);
-
-        user.getFriends().add(friendId);
-        friend.getFriends().add(userId);
-
-        return user;
+        return userStorage.addFriend(userId, friendId);
     }
 
-    public User deleteFriend(Integer userId, Integer friendId) {
+    public void deleteFriend(Integer userId, Integer friendId) {
         if (userId < 0 || friendId < 0) {
             logAndThrowException("Отрицательный id" + userId + friendId);
         }
-        User user = getUser(userId);
-        User friend = getUser(friendId);
+        userStorage.deleteFriend(userId, friendId);
+    }
 
-        if (!user.getFriends().contains(friendId)) {
-            logAndThrowNotFound("В дурзьях нет пользователя с id = " + friendId);
+    private boolean isValid(User user) {
+        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            logAndThrowException("Электронная почта пустая или отсуствует символ @");
         }
-        user.getFriends().remove(friend.getId());
-        friend.getFriends().remove(user.getId());
-
-        return user;
+        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+            logAndThrowException("Логин не может быть пустым или содержать пробелы.");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            logAndThrowException("Дата рождения не может быть в будущем.");
+        }
+        return true;
     }
 
     public List<User> getFriends(Integer userId) {
@@ -74,14 +91,6 @@ public class UserService {
                 .map(id -> getUser(id))
                 .collect(Collectors.toList());
     }
-
-    public User getUser(Integer userId) {
-        if (!getUsersMap().containsKey(userId)) {
-            logAndThrowNotFound("В базе нет пользователя с id" + userId);
-        }
-        return getUsersMap().get(userId);
-    }
-
 
     private void logAndThrowException(String message) {
         log.warn(message);

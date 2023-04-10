@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.film;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -12,4 +12,10 @@ public interface FilmStorage {
     Film updateFilm(Film film);
 
     void removeFilm(Integer id);
+
+    Film getFilm(Integer filmId);
+
+    void addLike(Integer filmId, Integer userId);
+
+    void removeLike(Integer filmId, Integer userId);
 }

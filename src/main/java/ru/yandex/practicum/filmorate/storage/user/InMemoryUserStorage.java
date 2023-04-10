@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +27,11 @@ public class InMemoryUserStorage implements UserStorage {
         if (users.containsKey(user.getId()) || isRepeat(user)) {
             logAndThrowNotFound("Пользователь уже занесен в базу");
         }
-        if (isValid(user)) {
-            user.setId(id++);
-            users.put(user.getId(), user);
-            log.info("Добавлен новый пользователь: " + user);
-        }
+
+        user.setId(id++);
+        users.put(user.getId(), user);
+        log.info("Добавлен новый пользователь: " + user);
+
         return user;
     }
 
@@ -44,15 +43,15 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(user.getId())) {
             logAndThrowNotFound("Пользователя нет в базе.");
         }
-        if (isValid(user)) {
-            User updatedUser = users.get(user.getId());
-            updatedUser.setEmail(user.getEmail());
-            updatedUser.setLogin(user.getLogin());
-            updatedUser.setName(user.getName());
-            updatedUser.setBirthday(user.getBirthday());
-            users.put(user.getId(), updatedUser);
-            log.debug("Обновлены данные пользователя " + user);
-        }
+
+        User updatedUser = users.get(user.getId());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setLogin(user.getLogin());
+        updatedUser.setName(user.getName());
+        updatedUser.setBirthday(user.getBirthday());
+        users.put(user.getId(), updatedUser);
+        log.debug("Обновлены данные пользователя " + user);
+
         return user;
     }
 
@@ -66,20 +65,28 @@ public class InMemoryUserStorage implements UserStorage {
         log.debug("Удален пользователь " + id);
     }
 
-    private boolean isValid(User user) {
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            logAndThrowException("Электронная почта пустая или отсуствует символ @");
+    public User getUser(Integer userId) {
+        if (!getUsersMap().containsKey(userId)) {
+            logAndThrowNotFound("В базе нет пользователя с id" + userId);
         }
-        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            logAndThrowException("Логин не может быть пустым или содержать пробелы.");
-        }
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            logAndThrowException("Дата рождения не может быть в будущем.");
-        }
-        return true;
+        return getUsersMap().get(userId);
+    }
+
+    public User addFriend(Integer userId, Integer friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+
+        user.getFriends().add(friendId);
+        friend.getFriends().add(userId);
+        return friend;
+    }
+
+    public void deleteFriend(Integer userId, Integer friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+
+        user.getFriends().remove(friend.getId());
+        friend.getFriends().remove(user.getId());
     }
 
     private boolean isRepeat(User user) {

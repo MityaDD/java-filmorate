@@ -1,21 +1,27 @@
-package ru.yandex.practicum.filmorate.controller;
+package ru.yandex.practicum.filmorate.database.controller;
 
-import org.junit.jupiter.api.AfterEach;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserControllerTest {
-    private UserController userController;
+    private final UserController userController;
 
     private User user;
     private User updatedUser;
@@ -29,42 +35,36 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userController = new UserController(new UserService(new InMemoryUserStorage()));
-        user = new User(1, "vasya666@mail.ru", "Nagibator", "Vasya",
+        user = new User("vasya666@mail.ru", "Nagibator", "Vasya",
                 LocalDate.of(2001, 1, 21));
         updatedUser = new User(1, "vasya666@yandex.ru", "NagibatorXXX", "Vasiliy",
                 LocalDate.of(2007, 7, 27));
 
-        userNoEmail = new User(1, "", "macho", "Steve",
+        userNoEmail = new User("", "macho", "Steve",
                 LocalDate.of(1996, 7, 16));
 
-        userIncorrectEmail = new User(1, "chaplimailro.ru", "pitipon", "Pierre",
+        userIncorrectEmail = new User("chaplimailro.ru", "pitipon", "Pierre",
                 LocalDate.of(1982, 3, 22));
 
-        userWithoutName = new User(1, "salvador@t.ru", "lucky777", "",
+        userWithoutName = new User("salvador@t.ru", "lucky777", "",
                 LocalDate.of(1989, 4, 8));
 
-        userEmptyLogin = new User(1, "pierrechaplin@ro.ru", "", "Olga",
+        userEmptyLogin = new User("pierrechaplin@ro.ru", "", "Olga",
                 LocalDate.of(2000, 11, 19));
 
-        userIncorrectLogin = new User(1, "ronin546@yandex.ru", "ro nin", "Igor",
+        userIncorrectLogin = new User("ronin546@yandex.ru", "ro nin", "Igor",
                 LocalDate.of(1984, 5, 13));
 
-        userBornNow = new User(1, "shadkhaniot@gmail.com", "shadkhan", "Nathan",
+        userBornNow = new User("shadkhaniot@gmail.com", "shadkhan", "Nathan",
                 LocalDate.now());
 
-        userFromFuture = new User(1, "xiolin@taiwanpost.tw", "*linyu*", "linyu",
+        userFromFuture = new User("xiolin@taiwanpost.tw", "*linyu*", "linyu",
                 LocalDate.of(2184, 5, 13));
-    }
-
-    @AfterEach
-    void tearDown() {
-        userController = null;
     }
 
     @Test
     @DisplayName("Добавляем нового пользователя с валидными данными")
-    void addNewFilmTest() {
+    void addUserTest() {
         userController.addUser(user);
 
         assertFalse(userController.getUsers().isEmpty());
@@ -135,19 +135,20 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Обновляем данные пользователя на данные с валидными данными")
-    void updateNewFilmTest() {
+    void updateUserTest() {
         userController.addUser(user);
 
         assertEquals(1, userController.getUsers().size(), "Хранилище пустое.");
         assertTrue(userController.getUsers().contains(user), "Пользователь не добавлен");
 
         userController.updateUser(updatedUser);
+        User returnedUser = userController.getUser(1);
 
         assertEquals(1, userController.getUsers().size(), "Хранилище пустое.");
-        assertEquals(user.getEmail(), updatedUser.getEmail(), "Эмейлы пользователей не совпадают.");
-        assertEquals(user.getLogin(), updatedUser.getLogin(), "Логины пользователей не совпадают.");
-        assertEquals(user.getName(), updatedUser.getName(), "Имена пользователей не совпадают.");
-        assertEquals(user.getBirthday(), updatedUser.getBirthday(), "ДР пользователей не совпадают.");
+        assertEquals(returnedUser.getEmail(), updatedUser.getEmail(), "Эмейлы пользователей не совпадают.");
+        assertEquals(returnedUser.getLogin(), updatedUser.getLogin(), "Логины пользователей не совпадают.");
+        assertEquals(returnedUser.getName(), updatedUser.getName(), "Имена пользователей не совпадают.");
+        assertEquals(returnedUser.getBirthday(), updatedUser.getBirthday(), "ДР пользователей не совпадают.");
     }
 
     @Test
@@ -190,6 +191,7 @@ class UserControllerTest {
     @DisplayName("Обновляем данные пользователя на данные с пустым именем")
     void updateUserWithoutNameTest() {
         userController.addUser(user);
+        userWithoutName.setId(1);
         userController.updateUser(userWithoutName);
 
         assertTrue(userController.getUsers().contains(userWithoutName), "Пользователь не добавлен");
@@ -199,6 +201,7 @@ class UserControllerTest {
     @DisplayName("Обновляем данные пользователя на данные, родившегося прямо сейчас")
     void updateUserBornNowTest() {
         userController.addUser(user);
+        userBornNow.setId(1);
         userController.updateUser(userBornNow);
 
         assertTrue(userController.getUsers().contains(userBornNow), "Пользователь не добавлен");
